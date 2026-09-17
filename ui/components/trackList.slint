@@ -1,0 +1,15 @@
+import { styles } from "../styles.slint";
+import { track } from "track.slint";
+
+export component trackList inherits Rectangle  {
+    background: styles.theme.container.background;
+    border-radius: styles.border-radius;
+
+    VerticalLayout {
+        spacing: styles.margin;
+        Text {
+            color: styles.theme.container.text;
+            text: "Songs go here :)";
+        }
+    }
+}

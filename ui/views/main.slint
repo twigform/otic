@@ -1,0 +1,17 @@
+import { styles } from "../styles.slint";
+import { trackList } from "../components/trackList.slint";
+import { sidePlayer } from "../components/sidePlayer.slint";
+
+export component mainView inherits HorizontalLayout  {
+    padding: styles.margin;
+    spacing: styles.margin / 2;
+
+    trackList{
+        horizontal-stretch: 1;
+    }
+
+    sidePlayer {
+        horizontal-stretch: 0;
+        width: 300px;
+    }
+}

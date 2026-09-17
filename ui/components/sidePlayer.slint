@@ -1,0 +1,14 @@
+import { styles } from "../styles.slint";
+
+export component sidePlayer inherits Rectangle  {
+    background: styles.theme.container.background;
+    border-radius: styles.border-radius;
+
+    HorizontalLayout {
+        spacing: styles.margin;
+        Text {
+            color: styles.theme.container.text;
+            text: "Track controls go here kinda";
+        }
+    }
+}

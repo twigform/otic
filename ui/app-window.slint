@@ -1,0 +1,10 @@
+import { styles } from "styles.slint";
+import { mainView } from "views/main.slint";
+
+export component MainWindow inherits Window {
+    background: styles.theme.background;
+    preferred-width: 900px;
+    preferred-height: 600px;
+
+    mainView {}
+}

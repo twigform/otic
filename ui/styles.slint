@@ -1,0 +1,56 @@
+struct container{
+    background: brush,
+    floating: brush,
+    ghost-text: brush,
+    text: brush
+}
+
+struct accent{
+    background: brush,
+    ghost-text: brush,
+    container: brush,
+    text: brush
+}
+
+struct mTheme{
+    background: brush,
+    container: container,
+    accent: accent,
+}
+
+export global styles{
+    out property <length> margin: 8px;
+    out property <length> border-radius: 6px;
+    out property <easing> easing: ease-out-back;
+    in-out property <bool> isDark: true;
+
+    out property <mTheme> theme: isDark ? {
+        background: #121214,
+        container: {
+            background: #1A1A1E,
+            floating: #242429,
+            ghost-text: #2F2F37,
+            text: #FCFCF7,
+        },
+        accent: {
+            background: #242822,
+            ghost-text: #0C0E0C,
+            container: #1B1E1A,
+            text: #FCFCF7,
+        },
+    } : {
+        background: #F3F3F4,
+        container: {
+            background: #FBFBFB,
+            floating: #FFFFFF,
+            ghost-text: #BFBFBF,
+            text: #1C1C21,
+        },
+        accent: {
+            background: #84917D,
+            ghost-text: #5C6657,
+            container: #464D42,
+            text: #FCFCF7,
+        },
+    };
+}
