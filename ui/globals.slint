@@ -1,0 +1,8 @@
+import { Track } from "common.slint";
+
+export global PlayerState {
+    in-out property <[Track]> tracks: [];
+    in-out property <int> selected-index: -1;
+
+    callback select-track(int);
+}

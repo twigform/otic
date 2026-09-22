@@ -1,15 +1,23 @@
 import { styles } from "../styles.slint";
 import { track } from "track.slint";
+import { ListView } from "std-widgets.slint";
+import { PlayerState } from "../globals.slint";
 
 export component trackList inherits Rectangle  {
     background: styles.theme.container.background;
     border-radius: styles.border-radius;
 
-    VerticalLayout {
-        spacing: styles.margin;
-        Text {
-            color: styles.theme.container.text;
-            text: "Songs go here :)";
+    if PlayerState.tracks.length == 0 : Text {
+        text: "No tracks found! :(";
+        color: styles.theme.container.text;
+        opacity: 0.5;
+    }
+
+    ListView{
+        for info[i] in PlayerState.tracks : track {
+            info: info;
+            index: i;
+            clicked => { PlayerState.select-track(i); }
         }
     }
 }

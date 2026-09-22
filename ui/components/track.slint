@@ -1,11 +1,39 @@
 import { styles } from "../styles.slint";
+import { Track } from "../common.slint";
+import { PlayerState } from "../globals.slint";
 
 
 export component track {
+    in property <Track> info;
+    in property <int> index;
+
+    callback clicked();
+
     Rectangle {
         border-radius: styles.border-radius;
-        background: styles.theme.container.floating;
+        background: area.pressed ? styles.theme.container.floating.darker(15%) : styles.theme.container.floating;
         height: 40px;
         horizontal-stretch: 1;
+
+        area := TouchArea {
+            clicked => { root.clicked(); }
+        }
+
+        HorizontalLayout {
+            padding: styles.margin;
+            spacing: styles.margin;
+            Text {
+                text: root.info.title;
+                color: styles.theme.container.text;
+                vertical-alignment: center;
+                horizontal-stretch: 1;
+            }
+            Text {
+                text: root.info.artist;
+                color: styles.theme.container.text;
+                vertical-alignment: center;
+                opacity: 0.6;
+            }
+        }
     }
 }
