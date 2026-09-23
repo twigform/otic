@@ -1,0 +1,15 @@
+import { styles } from "../styles.slint";
+
+export component settingsView inherits HorizontalLayout {
+    spacing: styles.margin / 2;
+
+    Rectangle {
+        horizontal-stretch: 1;
+        border-radius: styles.border-radius;
+        vertical-stretch: 1;
+        background: styles.theme.container.background;
+        Text {
+            text: "hi this is the settings page";
+        }
+    }
+}

@@ -3,7 +3,6 @@ import { trackList } from "../components/trackList.slint";
 import { sidePlayer } from "../components/sidePlayer.slint";
 
 export component mainView inherits HorizontalLayout  {
-    padding: styles.margin;
     spacing: styles.margin / 2;
 
     trackList{
@@ -12,6 +11,6 @@ export component mainView inherits HorizontalLayout  {
 
     sidePlayer {
         horizontal-stretch: 0;
-        width: 300px;
+        width: parent.width / 3.5;
     }
 }

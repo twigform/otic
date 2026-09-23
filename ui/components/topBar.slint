@@ -1,0 +1,61 @@
+import { styles } from "../styles.slint";
+import { CurrentView } from "../globals.slint";
+
+export component topBar inherits Rectangle {
+    background: styles.theme.container.background;
+    border-radius: styles.border-radius;
+    height: 32px;
+
+    HorizontalLayout {
+        padding: styles.margin / 2;
+        spacing: styles.margin / 2;
+        alignment: start;
+
+        home-button := Rectangle{
+            width: 48px;
+            height: 24px;
+            border-radius: styles.border-radius;
+            background: CurrentView.selected-view == 0
+                ? styles.theme.container.floating
+                : transparent;
+
+            Text {
+                text: "home";
+                color: styles.theme.container.text;
+                horizontal-alignment: center;
+                vertical-alignment: center;
+            }
+
+            TouchArea {
+                mouse-cursor: pointer;
+                clicked => {
+                    CurrentView.selected-view = 0;
+                }
+            }
+        }
+
+        settings-button := Rectangle{
+            width: 48px;
+            height: 24px;
+            border-radius: styles.border-radius;
+            background: CurrentView.selected-view == 1
+                ? styles.theme.container.floating
+                : transparent;
+
+            Text {
+                text: "settings";
+                color: styles.theme.container.text;
+                horizontal-alignment: center;
+                vertical-alignment: center;
+            }
+
+            TouchArea {
+                mouse-cursor: pointer;
+                clicked => {
+                    CurrentView.selected-view = 1;
+                }
+            }
+        }
+    }
+
+}

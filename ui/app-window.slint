@@ -1,14 +1,27 @@
 import { styles } from "styles.slint";
 import { mainView } from "views/main.slint";
+import { settingsView } from "views/settings.slint";
+import { topBar } from "components/topBar.slint";
+import { CurrentView } from "globals.slint";
+
 export { Track } from "common.slint";
 export { PlayerState } from "globals.slint";
 
 export component MainWindow inherits Window {
     title: "otic";
     icon: @image-url("assets/icon_vector.svg");
+
     background: styles.theme.background;
     preferred-width: 900px;
     preferred-height: 600px;
 
-    mainView {}
+    VerticalLayout {
+        padding: styles.margin;
+        spacing: styles.margin / 2;
+
+        topBar{}
+
+        if CurrentView.selected-view == 0 : mainView {}
+        if CurrentView.selected-view == 1 : settingsView {}
+    }
 }
