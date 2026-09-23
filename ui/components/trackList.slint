@@ -13,11 +13,22 @@ export component trackList inherits Rectangle  {
         opacity: 0.5;
     }
 
-    ListView{
-        for info[i] in PlayerState.tracks : track {
-            info: info;
-            index: i;
-            clicked => { PlayerState.select-track(i); }
+    HorizontalLayout {
+        padding: styles.margin;
+
+        ListView{
+            for info[i] in PlayerState.tracks : Rectangle {
+                height: 40px + styles.margin;
+
+                track {
+                    info: info;
+                    index: i;
+                    clicked => { PlayerState.select-track(i); }
+
+                    x: styles.margin / 2;
+                    width: parent.width - styles.margin;
+                }
+            }
         }
     }
 }

@@ -11,11 +11,21 @@ export component track {
 
     Rectangle {
         border-radius: styles.border-radius;
-        background: area.pressed ? styles.theme.container.floating.darker(15%) : styles.theme.container.floating;
+        background: area.pressed
+            ? styles.theme.container.floating.darker(15%)
+            : area.has-hover
+                ? styles.theme.container.floating.brighter(10%)
+                : styles.theme.container.floating;
         height: 40px;
         horizontal-stretch: 1;
 
+        animate background {
+            duration: 150ms;
+            easing: ease-out-quint;
+        }
+
         area := TouchArea {
+            mouse-cursor: pointer;
             clicked => { root.clicked(); }
         }
 

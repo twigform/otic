@@ -30,12 +30,25 @@ fn dummy_fill() -> Vec<Track> {
 
 fn main() -> Result<(), slint::PlatformError> {
     let main_window = MainWindow::new()?;
+    let weak_window = main_window.as_weak();
 
     let tracks_thing: Rc<VecModel<Track>> = Rc::new(VecModel::from(dummy_fill()));
 
     main_window
         .global::<PlayerState>()
         .set_tracks(ModelRc::from(tracks_thing.clone()));
+
+    main_window
+        .global::<PlayerState>()
+        .on_select_track(move |index| {
+            let Some(window) = weak_window.upgrade() else {
+                return;
+            };
+
+            window.global::<PlayerState>().set_selected_index(index);
+
+            println!("clicked track {index}");
+        });
 
     main_window.run()
 }
