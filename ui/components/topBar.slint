@@ -56,6 +56,29 @@ export component topBar inherits Rectangle {
                 }
             }
         }
+
+        theme-button := Rectangle{
+            width: 48px;
+            height: 24px;
+            border-radius: styles.border-radius;
+            background: CurrentView.selected-view == 1
+                ? styles.theme.container.floating
+                : transparent;
+
+            Text {
+                text: styles.isDark == true ?  "dark" : "light";
+                color: styles.theme.container.text;
+                horizontal-alignment: center;
+                vertical-alignment: center;
+            }
+
+            TouchArea {
+                mouse-cursor: pointer;
+                clicked => {
+                    styles.isDark = !styles.isDark;
+                }
+            }
+        }
     }
 
 }
