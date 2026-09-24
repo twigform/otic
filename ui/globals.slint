@@ -10,3 +10,8 @@ export global PlayerState {
 export global CurrentView {
     in-out property <int> selected-view: 0;
 }
+
+export global DirsState {
+    in-out property <[string]> directories: [];
+    callback add-directory();
+}

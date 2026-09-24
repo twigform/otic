@@ -1,7 +1,9 @@
 slint::include_modules!();
 
-use slint::{ModelRc, VecModel};
+use slint::{ModelRc, SharedString, VecModel};
 use std::rc::Rc;
+
+mod dir;
 
 fn dummy_fill() -> Vec<Track> {
     vec![
@@ -48,6 +50,30 @@ fn main() -> Result<(), slint::PlatformError> {
             window.global::<PlayerState>().set_selected_index(index);
 
             println!("clicked track {index}");
+        });
+
+    let init_dirs: Vec<SharedString> = dir::list_dirs()
+        .unwrap_or_default()
+        .into_iter()
+        .map(|p| p.display().to_string().into())
+        .collect();
+
+    let dirs_thing: Rc<VecModel<SharedString>> = Rc::new(VecModel::from(init_dirs));
+
+    main_window
+        .global::<DirsState>()
+        .set_directories(ModelRc::from(dirs_thing.clone()));
+
+    main_window
+        .global::<DirsState>()
+        .on_add_directory(move || match dir::add_dir() {
+            Ok(Some(chosen)) => {
+                dirs_thing.push(chosen.display().to_string().into());
+            }
+            Ok(None) => {}
+            Err(e) => {
+                eprintln!("ow... {e}");
+            }
         });
 
     main_window.run()
