@@ -1,4 +1,5 @@
 import { styles } from "../styles.slint";
+import { ScrollView, ListView } from "std-widgets.slint";
 
 export component settingsView inherits HorizontalLayout {
     spacing: styles.margin / 2;
@@ -8,8 +9,33 @@ export component settingsView inherits HorizontalLayout {
         border-radius: styles.border-radius;
         vertical-stretch: 1;
         background: styles.theme.container.background;
-        Text {
-            text: "hi this is the settings page";
+
+        VerticalLayout {
+            padding: styles.margin;
+            spacing: styles.margin;
+
+            Rectangle {
+                background: styles.theme.container.floating;
+                border-radius: styles.border-radius;
+                horizontal-stretch: 1;
+                height: 32px;
+
+                area := TouchArea {
+                    mouse-cursor: pointer;
+                }
+
+                Text {
+                    text: "+ Directory";
+                }
+            }
+
+            Rectangle { // this is where the list of dirs will go
+                background: styles.theme.background;
+                border-radius: styles.border-radius;
+                Text {
+                    text: "hi this is the settings page";
+                }
+            }
         }
     }
 }

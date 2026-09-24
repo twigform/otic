@@ -7,16 +7,20 @@ import { CurrentView } from "globals.slint";
 export { Track } from "common.slint";
 export { PlayerState } from "globals.slint";
 
+import "assets/fonts/GoogleSansFlex.ttf";
+
 export component MainWindow inherits Window {
     title: "otic";
     icon: @image-url("assets/icon_vector.svg");
+    default-font-family: "Google Sans Flex";
+    default-font-weight: 500;
 
     background: styles.theme.background;
     preferred-width: 900px;
     preferred-height: 600px;
 
     VerticalLayout {
-        padding: styles.margin;
+        padding: styles.margin / 2; // idk about this maybe change later
         spacing: styles.margin / 2;
 
         topBar{}
