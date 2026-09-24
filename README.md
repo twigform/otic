@@ -28,3 +28,7 @@ Week 11 onward: Album art display, performance optimizations, UI prettification.
 - Clone the repo with `git clone https://github.com/twigform/otic`
 - cd into the repo (`cd otic`)
 - simply run `cargo run`! that's it.
+
+Credits:
+App icon/logo made by me
+All icons / glyphs in app are heroicons

@@ -15,3 +15,9 @@ export global DirsState {
     in-out property <[string]> directories: [];
     callback add-directory();
 }
+
+export global WindowState {
+    callback minimize();
+    callback toggle-fullscreen();
+    callback close();
+}

@@ -5,8 +5,7 @@ import { topBar } from "components/topBar.slint";
 import { CurrentView } from "globals.slint";
 
 export { Track } from "common.slint";
-export { PlayerState } from "globals.slint";
-export { DirsState } from "globals.slint";
+export { PlayerState, DirsState, WindowState } from "globals.slint";
 
 import "assets/fonts/GoogleSansFlex.ttf";
 
@@ -16,17 +15,29 @@ export component MainWindow inherits Window {
     default-font-family: "Google Sans Flex";
     default-font-weight: 500;
 
-    background: styles.theme.background;
     preferred-width: 900px;
     preferred-height: 600px;
 
-    VerticalLayout {
-        padding: styles.margin / 2; // idk about this maybe change later
-        spacing: styles.margin / 2;
 
-        topBar{}
+    no-frame: true;
+    background: transparent;
+    resize-border-width: 6px;
 
-        if CurrentView.selected-view == 0 : mainView {}
-        if CurrentView.selected-view == 1 : settingsView {}
+    Rectangle {
+    border-color: #3a3836; // i just yoinked this by colorpicking the border from discord. probably should make it dynamic later idk
+    border-width: 1px;
+    background: styles.theme.background;
+    border-radius: 8px; // windows default https://learn.microsoft.com/en-us/windows/apps/design/signature-experiences/geometry
+    clip: true;
+
+        VerticalLayout {
+            padding: styles.margin;
+            spacing: styles.margin / 2;
+
+            topBar{}
+
+            if CurrentView.selected-view == 0 : mainView {}
+            if CurrentView.selected-view == 1 : settingsView {}
+        }
     }
 }

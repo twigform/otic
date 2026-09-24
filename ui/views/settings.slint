@@ -28,22 +28,31 @@ export component settingsView inherits HorizontalLayout {
                     }
                 }
 
-                Text {
-                    text: "+ Directory";
-                    color: styles.theme.container.text;
+                Image {
+                    source: @image-url("../assets/icons/add_dir.svg");
+                    width: 22px;
+                    height: 22px;
+                    colorize: styles.theme.container.text;
                 }
             }
 
             Rectangle {
-                background: styles.theme.background;
+                background: styles.theme.container.floating;
                 border-radius: styles.border-radius;
                 HorizontalLayout {
                 padding: styles.margin;
                     ListView {
-                        for dir in DirsState.directories: Text{
-                            text: dir;
-                            color: styles.theme.container.text;
-                            overflow: elide;
+                        for dir in DirsState.directories: Rectangle{
+                        background: styles.theme.container.background;
+                        border-radius: styles.border-radius;
+                        height: 32px;
+                            Text{
+                                text: dir;
+                                color: styles.theme.container.text;
+                                horizontal-alignment: left;
+                                x: styles.margin;
+                                overflow: elide;
+                            }
                         }
                     }
                 }

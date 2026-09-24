@@ -1,78 +1,145 @@
 import { styles } from "../styles.slint";
-import { CurrentView } from "../globals.slint";
+import { CurrentView, WindowState } from "../globals.slint";
 
 export component topBar inherits Rectangle {
     background: styles.theme.container.background;
     border-radius: styles.border-radius;
     height: 32px;
 
-    HorizontalLayout {
-        padding: styles.margin / 2;
-        spacing: styles.margin / 2;
-        alignment: start;
 
-        home-button := Rectangle{
-            width: 48px;
-            height: 24px;
-            border-radius: styles.border-radius;
-            background: CurrentView.selected-view == 0
-                ? styles.theme.container.floating
-                : transparent;
+    WindowMoveArea {
+        HorizontalLayout {
+            padding: styles.margin / 2;
+            spacing: styles.margin;
 
-            Text {
-                text: "home";
-                color: styles.theme.container.text;
-                horizontal-alignment: center;
-                vertical-alignment: center;
-            }
+            home-button := Rectangle{
+                width: 24px;
+                height: 24px;
+                border-radius: styles.border-radius;
+                background: CurrentView.selected-view == 0
+                    ? styles.theme.container.floating
+                    : transparent;
 
-            TouchArea {
-                mouse-cursor: pointer;
-                clicked => {
-                    CurrentView.selected-view = 0;
+                    Image {
+                        source: @image-url("../assets/icons/home.svg");
+                        width: 16px;
+                        height: 16px;
+                        colorize: styles.theme.container.text;
+                    }
+
+                TouchArea {
+                    mouse-cursor: pointer;
+                    clicked => {
+                        CurrentView.selected-view = 0;
+                    }
                 }
             }
-        }
 
-        settings-button := Rectangle{
-            width: 48px;
-            height: 24px;
-            border-radius: styles.border-radius;
-            background: CurrentView.selected-view == 1
-                ? styles.theme.container.floating
-                : transparent;
+            settings-button := Rectangle{
+                width: 24px;
+                height: 24px;
+                border-radius: styles.border-radius;
+                background: CurrentView.selected-view == 1
+                    ? styles.theme.container.floating
+                    : transparent;
 
-            Text {
-                text: "settings";
-                color: styles.theme.container.text;
-                horizontal-alignment: center;
-                vertical-alignment: center;
-            }
+                    Image {
+                        source: @image-url("../assets/icons/settings.svg");
+                        width: 16px;
+                        height: 16px;
+                        colorize: styles.theme.container.text;
+                    }
 
-            TouchArea {
-                mouse-cursor: pointer;
-                clicked => {
-                    CurrentView.selected-view = 1;
+                TouchArea {
+                    mouse-cursor: pointer;
+                    clicked => {
+                        CurrentView.selected-view = 1;
+                    }
                 }
             }
-        }
 
-        theme-button := Rectangle{
-            width: 48px;
-            height: 24px;
-            border-radius: styles.border-radius;
-
-            Text {
-                text: styles.isDark == true ?  "dark" : "light";
-                color: styles.theme.container.text;
-                horizontal-alignment: center;
-                vertical-alignment: center;
+            Rectangle {
+                horizontal-stretch: 1;
             }
 
-            TouchArea {
-                mouse-cursor: pointer;
-                clicked => {
-                    styles.isDark = !styles.isDark;
+            theme-button := Rectangle{
+                width: 24px;
+                height: 24px;
+                border-radius: styles.border-radius;
+                background: styles.theme.container.floating;
+
+                Image {
+                    source: styles.isDark ? @image-url("../assets/icons/dark.svg") : @image-url("../assets/icons/light.svg");
+                    width: 16px;
+                    height: 16px;
+                    colorize: styles.theme.container.text;
+                }
+
+                TouchArea {
+                    mouse-cursor: pointer;
+                    clicked => {
+                        styles.isDark = !styles.isDark;
+                    }
+                }
+            }
+
+            minimize-button := Rectangle {
+                width: 24px;
+                height: 24px;
+                border-radius: styles.border-radius;
+                background: minimize-touch.has-hover ? styles.theme.container.floating : transparent;
+                animate background { duration: 100ms; easing: styles.easing; }
+
+                Image {
+                    source: @image-url("../assets/icons/minimize.svg");
+                    width: 20px;
+                    height: 20px;
+                    colorize: styles.theme.container.text;
+                }
+
+                minimize-touch := TouchArea {
+                    mouse-cursor: pointer;
+                    clicked => { WindowState.minimize(); }
+                }
+            }
+
+            fullscreen-button := Rectangle {
+                width: 24px;
+                height: 24px;
+                border-radius: styles.border-radius;
+                background: fullscreen-touch.has-hover ? styles.theme.container.floating : transparent;
+                animate background { duration: 100ms; easing: styles.easing; }
+
+                Image {
+                    source: @image-url("../assets/icons/fullscreen.svg");
+                    width: 20px;
+                    height: 20px;
+                    colorize: styles.theme.container.text;
+                }
+
+                fullscreen-touch := TouchArea {
+                    mouse-cursor: pointer;
+                    clicked => { WindowState.toggle-fullscreen(); }
+                }
+            }
+
+            close-button := Rectangle {
+                width: 24px;
+                height: 24px;
+                border-radius: styles.border-radius;
+                background: close-touch.has-hover ? #e81123 : transparent;
+                animate background { duration: 100ms; easing: styles.easing; }
+
+                Image {
+                    source: @image-url("../assets/icons/close.svg");
+                    width: 20px;
+                    height: 20px;
+                    colorize: close-touch.has-hover ? white : styles.theme.container.text;
+                }
+
+                close-touch := TouchArea {
+                    mouse-cursor: pointer;
+                    clicked => { WindowState.close(); }
                 }
             }
         }
