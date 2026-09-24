@@ -61,9 +61,6 @@ export component topBar inherits Rectangle {
             width: 48px;
             height: 24px;
             border-radius: styles.border-radius;
-            background: CurrentView.selected-view == 1
-                ? styles.theme.container.floating
-                : transparent;
 
             Text {
                 text: styles.isDark == true ?  "dark" : "light";
