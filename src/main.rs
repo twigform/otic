@@ -48,10 +48,16 @@ fn main() -> Result<(), slint::PlatformError> {
         .set_directories(ModelRc::from(dirs_thing.clone()));
 
     main_window.global::<DirsState>().on_add_directory({
+        let tracks_thing = tracks_thing.clone();
         let dirs_thing = dirs_thing.clone();
 
         move || match dir::add_dir() {
             Ok(Some(chosen)) => {
+                let new_tracks = library::scan_all(&[chosen.clone()]);
+                for track in new_tracks {
+                    tracks_thing.push(track);
+                }
+
                 dirs_thing.push(chosen.display().to_string().into());
             }
             Ok(None) => {}
@@ -62,6 +68,7 @@ fn main() -> Result<(), slint::PlatformError> {
     });
 
     main_window.global::<DirsState>().on_rm_directory({
+        let tracks_thing = tracks_thing.clone();
         let dirs_thing = dirs_thing.clone();
 
         move |index| {
@@ -70,6 +77,10 @@ fn main() -> Result<(), slint::PlatformError> {
             match dir::rm_dir(index) {
                 Ok(()) => {
                     dirs_thing.remove(index);
+
+                    let all_dirs = dir::list_dirs().unwrap_or_default();
+                    let new_tracks = library::scan_all(&all_dirs);
+                    tracks_thing.set_vec(new_tracks);
                 }
                 Err(e) => {
                     eprintln!("wasn't able to remove dir: {e}");
