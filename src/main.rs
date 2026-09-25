@@ -4,31 +4,7 @@ use slint::{ModelRc, SharedString, VecModel};
 use std::rc::Rc;
 
 mod dir;
-
-fn dummy_fill() -> Vec<Track> {
-    vec![
-        Track {
-            title: "dummy song 1".into(),
-            artist: "dummy artist".into(),
-            dur: "3:01".into(),
-        },
-        Track {
-            title: "dummy song 2".into(),
-            artist: "dummy artist".into(),
-            dur: "3:02".into(),
-        },
-        Track {
-            title: "dummy song 3".into(),
-            artist: "dummy artist".into(),
-            dur: "3:03".into(),
-        },
-        Track {
-            title: "Eine kleine Nachtmusik (K. 525)".into(),
-            artist: "Wolfgang Amadeus Mozart".into(),
-            dur: "18:06".into(),
-        },
-    ]
-}
+mod library;
 
 fn main() -> Result<(), slint::PlatformError> {
     let main_window = MainWindow::new()?;
@@ -36,7 +12,10 @@ fn main() -> Result<(), slint::PlatformError> {
 
     // track stuff
 
-    let tracks_thing: Rc<VecModel<Track>> = Rc::new(VecModel::from(dummy_fill()));
+    let init_dirs = dir::list_dirs().unwrap_or_default();
+    let initial_tracks = library::scan_all(&init_dirs);
+
+    let tracks_thing: Rc<VecModel<Track>> = Rc::new(VecModel::from(initial_tracks));
 
     main_window
         .global::<PlayerState>()
@@ -57,13 +36,12 @@ fn main() -> Result<(), slint::PlatformError> {
 
     // directory stuff
 
-    let init_dirs: Vec<SharedString> = dir::list_dirs()
-        .unwrap_or_default()
-        .into_iter()
+    let init_dirs_vec: Vec<SharedString> = init_dirs
+        .iter()
         .map(|p| p.display().to_string().into())
         .collect();
 
-    let dirs_thing: Rc<VecModel<SharedString>> = Rc::new(VecModel::from(init_dirs));
+    let dirs_thing: Rc<VecModel<SharedString>> = Rc::new(VecModel::from(init_dirs_vec));
 
     main_window
         .global::<DirsState>()
