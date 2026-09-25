@@ -20,6 +20,7 @@ fn get_track(path: &Path) -> Track {
         title: title.into(),
         artist: "DJ Lorem".into(),
         dur: "3:00".into(),
+        path: path.display().to_string().into(),
     }
 }
 

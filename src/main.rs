@@ -1,14 +1,18 @@
 slint::include_modules!();
 
-use slint::{ModelRc, SharedString, VecModel};
+use slint::{Model, ModelRc, SharedString, VecModel};
+use std::cell::RefCell;
 use std::rc::Rc;
 
 mod dir;
 mod library;
+mod player;
 
 fn main() -> Result<(), slint::PlatformError> {
     let main_window = MainWindow::new()?;
     let weak_window = main_window.as_weak();
+
+    let player = Rc::new(RefCell::new(player::new_player()));
 
     // track stuff
 
@@ -23,12 +27,19 @@ fn main() -> Result<(), slint::PlatformError> {
 
     main_window.global::<PlayerState>().on_select_track({
         let weak_window = weak_window.clone();
+        let tracks_thing = tracks_thing.clone();
+        let player = player.clone();
+
         move |index| {
             let Some(window) = weak_window.upgrade() else {
                 return;
             };
 
             window.global::<PlayerState>().set_selected_index(index);
+
+            if let Some(track) = tracks_thing.row_data(index as usize) {
+                player::play_file(&mut player.borrow_mut(), &track.path);
+            }
 
             println!("clicked track {index}");
         }
