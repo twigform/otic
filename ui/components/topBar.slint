@@ -92,8 +92,9 @@ export component topBar inherits Rectangle {
 
                 Image {
                     source: @image-url("../assets/icons/minimize.svg");
-                    width: 20px;
-                    height: 20px;
+                    width: minimize-touch.has-hover ? 22px : 20px;
+                    height: minimize-touch.has-hover ? 22px : 20px;
+                    animate width, height { duration: 100ms; easing: styles.easing; }
                     colorize: styles.theme.container.text;
                 }
 
@@ -112,8 +113,9 @@ export component topBar inherits Rectangle {
 
                 Image {
                     source: @image-url("../assets/icons/fullscreen.svg");
-                    width: 20px;
-                    height: 20px;
+                    width: fullscreen-touch.has-hover ? 20px : 18px;
+                    height: fullscreen-touch.has-hover ? 20px : 18px;
+                    animate width, height { duration: 100ms; easing: styles.easing; }
                     colorize: styles.theme.container.text;
                 }
 
@@ -132,8 +134,9 @@ export component topBar inherits Rectangle {
 
                 Image {
                     source: @image-url("../assets/icons/close.svg");
-                    width: 20px;
-                    height: 20px;
+                    width: close-touch.has-hover ? 22px : 20px;
+                    height: close-touch.has-hover ? 22px : 20px;
+                    animate width, height { duration: 100ms; easing: styles.easing; }
                     colorize: close-touch.has-hover ? white : styles.theme.container.text;
                 }
 

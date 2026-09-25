@@ -60,6 +60,22 @@ pub fn add_dir() -> io::Result<Option<PathBuf>> {
     Ok(Some(chosen))
 }
 
+pub fn rm_dir(index: usize) -> io::Result<()> {
+    let path = conf_init()?;
+    let mut config = read_config(&path)?;
+    if index >= config.dirs.len() {
+        return Err(io::Error::new(
+            io::ErrorKind::InvalidInput,
+            "that dir number does not exist...?",
+        ));
+    }
+
+    config.dirs.remove(index);
+    write_config(&path, &config)?;
+
+    Ok(())
+}
+
 pub fn list_dirs() -> io::Result<Vec<PathBuf>> {
     let path = conf_init()?;
     let config = read_config(&path)?;

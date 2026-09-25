@@ -47,17 +47,36 @@ fn main() -> Result<(), slint::PlatformError> {
         .global::<DirsState>()
         .set_directories(ModelRc::from(dirs_thing.clone()));
 
-    main_window
-        .global::<DirsState>()
-        .on_add_directory(move || match dir::add_dir() {
+    main_window.global::<DirsState>().on_add_directory({
+        let dirs_thing = dirs_thing.clone();
+
+        move || match dir::add_dir() {
             Ok(Some(chosen)) => {
                 dirs_thing.push(chosen.display().to_string().into());
             }
             Ok(None) => {}
             Err(e) => {
-                eprintln!("ow... {e}");
+                eprintln!("wasn't able to add dir: {e}");
             }
-        });
+        }
+    });
+
+    main_window.global::<DirsState>().on_rm_directory({
+        let dirs_thing = dirs_thing.clone();
+
+        move |index| {
+            let index = index as usize;
+
+            match dir::rm_dir(index) {
+                Ok(()) => {
+                    dirs_thing.remove(index);
+                }
+                Err(e) => {
+                    eprintln!("wasn't able to remove dir: {e}");
+                }
+            }
+        }
+    });
 
     // window controls
 

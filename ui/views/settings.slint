@@ -1,5 +1,5 @@
 import { styles } from "../styles.slint";
-import { ScrollView, ListView } from "std-widgets.slint";
+import { ScrollView, ListView, Button } from "std-widgets.slint";
 import { DirsState } from "../globals.slint";
 
 export component settingsView inherits HorizontalLayout {
@@ -42,16 +42,44 @@ export component settingsView inherits HorizontalLayout {
                 HorizontalLayout {
                 padding: styles.margin;
                     ListView {
-                        for dir in DirsState.directories: Rectangle{
+                        for dir[index] in DirsState.directories: Rectangle{
                         background: styles.theme.container.background;
                         border-radius: styles.border-radius;
                         height: 32px;
-                            Text{
-                                text: dir;
-                                color: styles.theme.container.text;
-                                horizontal-alignment: left;
-                                x: styles.margin;
-                                overflow: elide;
+                            HorizontalLayout {
+                                padding: styles.margin / 2;
+                                spacing: styles.margin / 2;
+                                padding-left: styles.margin;
+
+                                Text{
+                                    text: dir;
+                                    color: styles.theme.container.text;
+                                    horizontal-alignment: left;
+                                    vertical-alignment: center;
+                                    overflow: elide;
+                                    horizontal-stretch: 1;
+                                }
+
+                                rm-button := Rectangle {
+                                    width: 24px;
+                                    height: 24px;
+                                    border-radius: styles.border-radius;
+                                    background: rm-touch.has-hover ? #e81123 : styles.theme.container.floating;
+                                    animate background { duration: 100ms; easing: styles.easing; }
+
+
+                                    Image {
+                                        source: @image-url("../assets/icons/delete.svg");
+                                        width: 16px;
+                                        height: 16px;
+                                        colorize: rm-touch.has-hover ? white : styles.theme.container.text;
+                                    }
+
+                                    rm-touch := TouchArea {
+                                        mouse-cursor: pointer;
+                                        clicked => { DirsState.rm-directory(index); }
+                                    }
+                                }
                             }
                         }
                     }
