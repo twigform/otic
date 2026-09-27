@@ -1,5 +1,6 @@
 import { styles } from "../styles.slint";
 import { PlayerState } from "../globals.slint";
+import { controls } from "controls.slint";
 
 export component sidePlayer inherits Rectangle  {
     background: styles.theme.background;
@@ -48,5 +49,6 @@ export component sidePlayer inherits Rectangle  {
             }
         }
 
+        controls {}
     }
 }

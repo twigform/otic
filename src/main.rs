@@ -39,9 +39,26 @@ fn main() -> Result<(), slint::PlatformError> {
 
             if let Some(track) = tracks_thing.row_data(index as usize) {
                 player::play_file(&mut player.borrow_mut(), &track.path);
+                window.global::<PlayerState>().set_playing(true);
             }
 
             println!("clicked track {index}");
+        }
+    });
+
+    main_window.global::<PlayerState>().on_toggle({
+        let weak_window = weak_window.clone();
+        let player = player.clone();
+
+        move || {
+            let Some(window) = weak_window.upgrade() else {
+                return;
+            };
+
+            player::toggle(&mut player.borrow_mut());
+
+            let playing = player::playing(&player.borrow());
+            window.global::<PlayerState>().set_playing(playing);
         }
     });
 

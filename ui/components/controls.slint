@@ -1,0 +1,35 @@
+import { styles } from "../styles.slint";
+import { PlayerState } from "../globals.slint";
+
+export component controls inherits Rectangle {
+    property <bool> something_playing: PlayerState.selected-index >= 0 && PlayerState.selected-index < PlayerState.tracks.length;
+
+    height: 48px;
+    horizontal-stretch: 1;
+
+    HorizontalLayout {
+        alignment: center;
+
+        Rectangle {
+            width: 48px;
+            height: 48px;
+            border-radius: styles.border-radius;
+            background: area.has-hover ? styles.theme.container.background : transparent;
+
+            area := TouchArea {
+                mouse-cursor: pointer;
+                enabled: root.something_playing;
+                clicked => { PlayerState.toggle(); }
+            }
+
+            Image {
+                source: PlayerState.playing
+                    ? @image-url("../assets/icons/pause.svg")
+                    : @image-url("../assets/icons/play.svg");
+                width: 32px;
+                height: 32px;
+                colorize: root.something_playing ? styles.theme.container.text : styles.theme.container.ghost-text;
+            }
+        }
+    }
+}

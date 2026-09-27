@@ -14,6 +14,24 @@ pub fn new_player() -> Player {
     }
 }
 
+pub fn toggle(player: &mut Player) {
+    if let Some(current) = &player.current {
+        if current.is_paused() {
+            current.play();
+        } else {
+            current.pause();
+        }
+    }
+}
+
+pub fn playing(player: &Player) -> bool {
+    player
+        .current
+        .as_ref()
+        .map(|p| !p.is_paused())
+        .unwrap_or(false)
+}
+
 pub fn play_file(player: &mut Player, path: &str) {
     let file = match File::open(path) {
         Ok(f) => f,
