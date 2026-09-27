@@ -3,9 +3,15 @@ import { trackList } from "../components/trackList.slint";
 import { sidePlayer } from "../components/sidePlayer.slint";
 
 export component mainView inherits HorizontalLayout  {
-    spacing: styles.margin / 2;
+    // spacing: styles.margin / 2;
 
     trackList{
+        horizontal-stretch: 1;
+    }
+
+    Rectangle {
+        width: 1px;
+        background: styles.theme.container.border;
         horizontal-stretch: 1;
     }
 

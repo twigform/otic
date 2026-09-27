@@ -2,8 +2,9 @@ import { styles } from "../styles.slint";
 import { PlayerState } from "../globals.slint";
 
 export component sidePlayer inherits Rectangle  {
-    background: styles.theme.container.background;
-    border-radius: styles.border-radius;
+    background: styles.theme.background;
+    border-top-left-radius: styles.border-radius;
+    // border-radius: styles.border-radius;
 
     property <bool> has-selection: PlayerState.selected-index >= 0 && PlayerState.selected-index < PlayerState.tracks.length;
 
@@ -12,10 +13,19 @@ export component sidePlayer inherits Rectangle  {
         padding: styles.margin;
         alignment: center;
 
+        if !root.has-selection: HorizontalLayout {
+            alignment: center;
+            Image {
+                source: @image-url("../assets/icon_nobg.svg");
+                width: 100px;
+                height: 100px;
+                colorize: styles.theme.container.ghost-text;
+            }
+        }
+
         if !root.has-selection: Text {
-            text: "nothing playing... click a track to play it! ♪ヾ(＞ω＜)ゞ";
-            color: styles.theme.container.text;
-            opacity: 0.5;
+            text: "Nothing playing... Click a track to play it!";
+            color: styles.theme.container.ghost-text;
             horizontal-alignment: center;
             overflow: elide;
         }

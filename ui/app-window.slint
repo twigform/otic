@@ -31,10 +31,17 @@ export component MainWindow inherits Window {
     clip: true;
 
         VerticalLayout {
-            padding: styles.margin;
-            spacing: styles.margin / 2;
+            // padding: styles.margin;
+            // spacing: styles.margin / 2;
 
             topBar{}
+
+            Rectangle {
+                height: 1px;
+                background: styles.theme.container.border;
+                horizontal-stretch: 1;
+            }
+
 
             if CurrentView.selected-view == 0 : mainView {}
             if CurrentView.selected-view == 1 : settingsView {}

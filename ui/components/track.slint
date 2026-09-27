@@ -9,20 +9,22 @@ export component track {
 
     callback clicked();
 
+    property <bool> playing: root.index == PlayerState.selected-index;
+
     Rectangle {
         border-radius: styles.border-radius;
-        background: area.pressed
-            ? styles.theme.container.floating.darker(15%)
+        background: root.playing
+            ? styles.theme.container.floating
             : area.has-hover
-                ? styles.theme.container.floating.brighter(10%)
-                : styles.theme.container.floating;
+                ? styles.theme.container.floating.with-alpha(50%)
+                : transparent;
         height: 40px;
         horizontal-stretch: 1;
 
-        animate background {
-            duration: 150ms;
-            easing: styles.easing;
-        }
+        // animate background {
+        //     duration: 100ms;
+        //     easing: styles.easing;
+        // }
 
         area := TouchArea {
             mouse-cursor: pointer;
