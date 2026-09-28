@@ -23,11 +23,13 @@ export component MainWindow inherits Window {
     background: transparent;
     resize-border-width: 6px;
 
+    property <bool> linux: Platform.os == OperatingSystemType.linux;
+
     Rectangle {
     border-color: #3a3836; // i just yoinked this by colorpicking the border from discord. probably should make it dynamic later idk
-    border-width: 1px;
+    border-width: root.linux ? 0px : 1px;
     background: styles.theme.background;
-    border-radius: 8px; // windows default https://learn.microsoft.com/en-us/windows/apps/design/signature-experiences/geometry
+    border-radius: root.linux ? 0px : 8px; // windows default https://learn.microsoft.com/en-us/windows/apps/design/signature-experiences/geometry
     clip: true;
 
         VerticalLayout {
