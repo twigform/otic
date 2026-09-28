@@ -36,9 +36,10 @@ export component sidePlayer inherits Rectangle  {
                 text: PlayerState.tracks[PlayerState.selected-index].title;
                 color: styles.theme.container.text;
                 font-size: 16px;
-                font-weight: 700;
                 horizontal-alignment: center;
                 overflow: elide;
+                font-weight: PlayerState.playing ? 800 : 500;
+                animate font-weight { duration: 200ms; easing: styles.easing; }
             }
 
             Text {
