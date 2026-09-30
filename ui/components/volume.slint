@@ -1,0 +1,137 @@
+import { styles } from "../styles.slint";
+import { PlayerState } from "../globals.slint";
+import { Slider } from "std-widgets.slint";
+
+export component MySlider inherits Rectangle {
+    in-out property<float> maximum: 1;
+    in-out property<float> minimum: 0;
+    in-out property<float> value;
+    callback moved(float);
+
+    min-height: 60px;
+    width: touch.pressed ? 6px : 4px;
+    vertical-stretch: 1;
+    border-radius: root.height/2;
+    background: styles.theme.container.floating.darker(25%);
+    animate width {
+        duration: 120ms;
+        easing: styles.easing;
+    }
+
+    fill := Rectangle {
+        x: 0;
+        width: parent.width;
+        height: parent.height - handle.y - handle.height / 2;
+        y: handle.y + handle.height / 2;
+        background: styles.theme.container.ghost-text;
+        border-radius: self.width / 2;
+    }
+
+    handle := Rectangle {
+        width: touch.pressed ? 16px : 4px;
+        height: 4px;
+        x: (parent.width - self.width) / 2;
+        border-width: 3px;
+        border-radius: self.width / 2;
+        background: styles.theme.container.ghost-text;
+        y: (root.height - handle.height) * (1 - (root.value - root.minimum)/(root.maximum - root.minimum));
+        animate width {
+            duration: 120ms;
+            easing: styles.easing;
+        }
+    }
+
+    touch := TouchArea {
+        width: 24px;
+        x: (parent.width - self.width) / 2;
+        property <float> pressed-value;
+        mouse-cursor: pointer;
+        pointer-event(event) => {
+            if (event.button == PointerEventButton.left && event.kind == PointerEventKind.down) {
+                self.pressed-value = root.value;
+            }
+        }
+        moved => {
+            if (self.enabled && self.pressed) {
+                root.value = max(root.minimum, min(root.maximum,
+                    self.pressed-value - (touch.mouse-y - touch.pressed-y) * (root.maximum - root.minimum) / (root.height - handle.height)));
+                root.moved(root.value);
+            }
+        }
+    }
+}
+
+// maybe the slider should not be raw coded into here and it should be its own component so i dont have to redo everything for the progress bar but i dont really care right now
+
+export component volume inherits Rectangle{
+    width: 24px;
+    height: 24px;
+    border-radius: styles.border-radius;
+    background: open ? styles.theme.container.floating : transparent;
+    animate background{
+        duration: 100ms;
+        easing: styles.easing;
+    }
+    property <bool> open: touch.has-hover || popup.has-hover;
+
+    Image{
+        source: @image-url("../assets/icons/volume.svg");
+        width: 16px;
+        height: 16px;
+        colorize: styles.theme.container.text;
+    }
+
+    touch := TouchArea{
+        mouse-cursor: pointer;
+    }
+
+    popup := TouchArea{
+    // maybe do a transform for this later
+        opacity: root.open ? 1 : 0;
+        visible: self.opacity > 0;
+        x: (parent.width - self.width) / 2;
+        y: parent.height;
+        width: 42px;
+        height: 150px;
+
+        animate opacity{
+            duration: 120ms;
+            easing: styles.easing;
+        }
+
+        Rectangle{
+            y: styles.margin;
+            height: parent.height - styles.margin / 2;
+            background: styles.theme.container.background;
+            border-color: styles.theme.container.border;
+            border-width: 1px;
+            border-radius: styles.border-radius;
+
+            VerticalLayout{
+                padding: styles.margin / 2;
+                spacing: styles.margin / 2;
+                padding-top: styles.margin;
+                padding-bottom: styles.margin;
+
+                HorizontalLayout {
+                    alignment: center;
+                    slider := MySlider {
+                        value: PlayerState.volume;
+
+                        moved(v) => {
+                            PlayerState.volume = v;
+                            PlayerState.set-volume(v);
+                        }
+                    }
+                }
+
+                Text{
+                    text: "\{round(slider.value*100)}%";
+                    horizontal-alignment: center;
+                    color: styles.theme.container.ghost-text;
+                    font-weight: 200 + round(slider.value * 700);
+                }
+            }
+        }
+    }
+}

@@ -4,6 +4,7 @@ use std::fs::File;
 pub struct Player {
     pub device: MixerDeviceSink,
     pub current: Option<rodio::Player>,
+    pub volume: f32,
 }
 
 pub fn new_player() -> Player {
@@ -11,6 +12,14 @@ pub fn new_player() -> Player {
     Player {
         device,
         current: None,
+        volume: 0.5,
+    }
+}
+
+pub fn set_volume(player: &mut Player, volume: f32) {
+    player.volume = volume;
+    if let Some(current) = &player.current {
+        current.set_volume(player.volume);
     }
 }
 
@@ -51,6 +60,7 @@ pub fn play_file(player: &mut Player, path: &str) {
 
     player.current = None;
     let p = rodio::Player::connect_new(player.device.mixer());
+    p.set_volume(player.volume);
     p.append(source);
     player.current = Some(p);
 }

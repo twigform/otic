@@ -46,6 +46,14 @@ fn main() -> Result<(), slint::PlatformError> {
         }
     });
 
+    main_window.global::<PlayerState>().on_set_volume({
+        let player = player.clone();
+
+        move |volume| {
+            player::set_volume(&mut player.borrow_mut(), volume);
+        }
+    });
+
     main_window.global::<PlayerState>().on_toggle({
         let weak_window = weak_window.clone();
         let player = player.clone();

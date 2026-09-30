@@ -1,5 +1,6 @@
 import { styles } from "../styles.slint";
 import { CurrentView, WindowState } from "../globals.slint";
+import { volume } from "volume.slint";
 
 export component topBar inherits Rectangle {
     background: styles.theme.container.background;
@@ -63,6 +64,8 @@ export component topBar inherits Rectangle {
             Rectangle {
                 horizontal-stretch: 1;
             }
+
+            volume {}
 
             theme-button := Rectangle{
                 width: 24px;
