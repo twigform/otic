@@ -16,3 +16,31 @@ The other main crate I'm using is rodio, which is for audio playback!
 
 The next steps for me will be ui polish, volume controls (it just blasts you at the moment), and queue implementation!
 One thing that I've realized I want to add (but won't be a priority) is the ability to search through tracks, as it's rather hard to find a specific track if you have a large library at the moment.
+
+- [x] Week 1: Mockup UI in Figma, research Rust libraries to be used, init repo 
+
+- [x] Week 2: Rough UI skeleton, basic window/layout, placeholder views
+
+- [x] Week 3: Implement ability to add/remove directories
+
+- [x] Week 4: UI population
+
+- [x] Week 5: Basic playback implementation
+
+## Week 2
+
+A little less than last week (which is to be expected as last week was mostly laying down the base.); This week I mostly just polished up/animated certain UI elements and added some nice volume controls! Nothing new on the timeline is done, mostly because volume control is something I kinda forgot I would have to do at all. This isn't a huge issue though, as I'm already pretty ahead of schedule. 
+
+No new libraries/crates were added this week.
+
+The main next step I'm going to focus on is adding a functional queue.
+
+- [x] Week 1: Mockup UI in Figma, research Rust libraries to be used, init repo 
+
+- [x] Week 2: Rough UI skeleton, basic window/layout, placeholder views
+
+- [x] Week 3: Implement ability to add/remove directories
+
+- [x] Week 4: UI population
+
+- [x] Week 5: Basic playback implementation

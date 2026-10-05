@@ -90,11 +90,11 @@ export component volume inherits Rectangle{
         opacity: root.open ? 1 : 0;
         visible: self.opacity > 0;
         x: (parent.width - self.width) / 2;
-        y: parent.height;
+        y: root.open ? parent.height : parent.height - 4px;
         width: 42px;
         height: 150px;
 
-        animate opacity{
+        animate opacity, y{
             duration: 120ms;
             easing: styles.easing;
         }
