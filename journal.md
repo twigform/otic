@@ -1,6 +1,11 @@
 # Journal
 
-## Week 1 (and kind of week 0 as well, sorta):  
+## Week 0:
+Mockup UI in Figma, make presentation, do research.
+
+- [x] Week 1: Mockup UI in Figma, research Rust libraries to be used, init repo 
+
+## Week 1 - 3:  
 Base UI and basic playback added! The way everything works basically is:
 globals.slint holds some container things that have callbacks and vars. In slint I can make certain ui elements activate callbacks (eg. `clicked => { DirsState.add-directory(); }`). Then in rust I'm able to do something when that callback is activated by doing something like this: 
 ```
@@ -27,7 +32,7 @@ One thing that I've realized I want to add (but won't be a priority) is the abil
 
 - [x] Week 5: Basic playback implementation
 
-## Week 2
+## Week 4:
 
 A little less than last week (which is to be expected as last week was mostly laying down the base.); This week I mostly just polished up/animated certain UI elements and added some nice volume controls! Nothing new on the timeline is done, mostly because volume control is something I kinda forgot I would have to do at all. This isn't a huge issue though, as I'm already pretty ahead of schedule. 
 
