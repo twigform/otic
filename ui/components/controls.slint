@@ -14,9 +14,49 @@ export component controls inherits Rectangle {
             width: 48px;
             height: 48px;
             border-radius: styles.border-radius;
-            background: area.has-hover ? styles.theme.container.background : transparent;
+            background: backarea.has-hover ? styles.theme.container.background : transparent;
 
-            area := TouchArea {
+            backarea := TouchArea {
+                mouse-cursor: pointer;
+                enabled: root.something_playing;
+                clicked => { PlayerState.previous(); }
+            }
+
+            Image {
+                source: @image-url("../assets/icons/back.svg");
+                width: 32px;
+                height: 32px;
+
+                transform-scale: backarea.pressed
+                    ? 95%
+                    : backarea.has-hover
+                        ? 110%
+                        : 100%;
+
+                x: backarea.pressed ? ((parent.width - self.width) / 2) - 4px : (parent.width - self.width) / 2;
+
+                animate transform-scale {
+                    duration: 220ms;
+                    easing: styles.easing;
+                }
+
+                animate x {
+                    duration: 220ms;
+                    delay: 100ms;
+                    easing: styles.easing;
+                }
+
+                colorize: root.something_playing ? styles.theme.container.text : styles.theme.container.ghost-text;
+            }
+        }
+
+        Rectangle {
+            width: 48px;
+            height: 48px;
+            border-radius: styles.border-radius;
+            background: playarea.has-hover ? styles.theme.container.background : transparent;
+
+            playarea := TouchArea {
                 mouse-cursor: pointer;
                 enabled: root.something_playing;
                 clicked => { PlayerState.toggle(); }
@@ -28,6 +68,58 @@ export component controls inherits Rectangle {
                     : @image-url("../assets/icons/play.svg");
                 width: 32px;
                 height: 32px;
+
+                transform-scale: playarea.pressed
+                    ? 95%
+                    : playarea.has-hover
+                        ? 110%
+                        : 100%;
+
+                animate transform-scale {
+                    duration: 220ms;
+                    easing: styles.easing;
+                }
+
+                colorize: root.something_playing ? styles.theme.container.text : styles.theme.container.ghost-text;
+            }
+        }
+
+        Rectangle {
+            width: 48px;
+            height: 48px;
+            border-radius: styles.border-radius;
+            background: forwardarea.has-hover ? styles.theme.container.background : transparent;
+
+            forwardarea := TouchArea {
+                mouse-cursor: pointer;
+                enabled: root.something_playing;
+                clicked => { PlayerState.next(); }
+            }
+
+            Image {
+                source: @image-url("../assets/icons/forward.svg");
+                width: 32px;
+                height: 32px;
+
+                transform-scale: forwardarea.pressed
+                    ? 95%
+                    : forwardarea.has-hover
+                        ? 110%
+                        : 100%;
+
+                x: forwardarea.pressed ? ((parent.width - self.width) / 2) + 4px : (parent.width - self.width) / 2;
+
+                animate transform-scale {
+                    duration: 220ms;
+                    easing: styles.easing;
+                }
+
+                animate x {
+                    duration: 220ms;
+                    delay: 100ms;
+                    easing: styles.easing;
+                }
+
                 colorize: root.something_playing ? styles.theme.container.text : styles.theme.container.ghost-text;
             }
         }

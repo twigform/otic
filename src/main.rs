@@ -8,6 +8,26 @@ mod dir;
 mod library;
 mod player;
 
+fn play_at(
+    window: &MainWindow,
+    tracks: &VecModel<Track>,
+    player: &mut player::Player,
+    index: usize,
+) {
+    let Some(track) = tracks.row_data(index) else {
+        return;
+    };
+
+    let weak = window.as_weak();
+    player::play_file(player, &track.path, move || {
+        let _ = weak.upgrade_in_event_loop(|w| w.global::<PlayerState>().invoke_next());
+    });
+
+    let state = window.global::<PlayerState>();
+    state.set_selected_index(index as i32);
+    state.set_playing(player::playing(player));
+}
+
 fn main() -> Result<(), slint::PlatformError> {
     let main_window = MainWindow::new()?;
     let weak_window = main_window.as_weak();
@@ -34,15 +54,12 @@ fn main() -> Result<(), slint::PlatformError> {
             let Some(window) = weak_window.upgrade() else {
                 return;
             };
-
-            window.global::<PlayerState>().set_selected_index(index);
-
-            if let Some(track) = tracks_thing.row_data(index as usize) {
-                player::play_file(&mut player.borrow_mut(), &track.path);
-                window.global::<PlayerState>().set_playing(true);
-            }
-
-            println!("clicked track {index}");
+            play_at(
+                &window,
+                &tracks_thing,
+                &mut player.borrow_mut(),
+                index as usize,
+            );
         }
     });
 
@@ -67,6 +84,53 @@ fn main() -> Result<(), slint::PlatformError> {
 
             let playing = player::playing(&player.borrow());
             window.global::<PlayerState>().set_playing(playing);
+        }
+    });
+
+    main_window.global::<PlayerState>().on_next({
+        let weak_window = weak_window.clone();
+        let tracks_thing = tracks_thing.clone();
+        let player = player.clone();
+
+        move || {
+            let Some(window) = weak_window.upgrade() else {
+                return;
+            };
+            let next = window.global::<PlayerState>().get_selected_index() + 1;
+
+            if next >= 0 && (next as usize) < tracks_thing.row_count() {
+                play_at(
+                    &window,
+                    &tracks_thing,
+                    &mut player.borrow_mut(),
+                    next as usize,
+                );
+            } else {
+                player.borrow_mut().current = None;
+                window.global::<PlayerState>().set_playing(false);
+            }
+        }
+    });
+
+    main_window.global::<PlayerState>().on_previous({
+        let weak_window = weak_window.clone();
+        let tracks_thing = tracks_thing.clone();
+        let player = player.clone();
+
+        move || {
+            let Some(window) = weak_window.upgrade() else {
+                return;
+            };
+            let prev = window.global::<PlayerState>().get_selected_index() - 1;
+
+            if prev >= 0 {
+                play_at(
+                    &window,
+                    &tracks_thing,
+                    &mut player.borrow_mut(),
+                    prev as usize,
+                );
+            }
         }
     });
 

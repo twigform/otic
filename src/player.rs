@@ -1,3 +1,4 @@
+use rodio::source::EmptyCallback;
 use rodio::{Decoder, MixerDeviceSink};
 use std::fs::File;
 
@@ -41,7 +42,7 @@ pub fn playing(player: &Player) -> bool {
         .unwrap_or(false)
 }
 
-pub fn play_file(player: &mut Player, path: &str) {
+pub fn play_file(player: &mut Player, path: &str, on_finished: impl Fn() + Send + 'static) {
     let file = match File::open(path) {
         Ok(f) => f,
         Err(e) => {
@@ -62,5 +63,6 @@ pub fn play_file(player: &mut Player, path: &str) {
     let p = rodio::Player::connect_new(player.device.mixer());
     p.set_volume(player.volume);
     p.append(source);
+    p.append(EmptyCallback::new(Box::new(on_finished)));
     player.current = Some(p);
 }
