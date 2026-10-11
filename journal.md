@@ -49,3 +49,23 @@ The main next step I'm going to focus on is adding a functional queue.
 - [x] Week 4: UI population
 
 - [x] Week 5: Basic playback implementation
+
+## Week 5:
+
+Queue implemented! Essentially just changed how playback works to use a new function in the main file, which uses a audio ended callback (EmptyCallback) from rodio (which is being called from the play_file function in the player file.) to know when to start the next track. 
+I also added buttons (and their associated callbacks) to allow the user to seek back and forth between tracks. The UI keeps track of which track is currently playing with an index from the tracklist, so seeking simply adds or removes one to that index.
+Other than that, I gave the buttons some fancy animations! (The pause button shrinks/grows on press and hover, and the seek buttons shrink/grow as well, but also move a bit in the associated direction on press.)
+
+Next, I'll be focusing on adding a progress bar/seeker at the bottom, and metadata scanning.
+
+- [x] Week 1: Mockup UI in Figma, research Rust libraries to be used, init repo 
+
+- [x] Week 2: Rough UI skeleton, basic window/layout, placeholder views
+
+- [x] Week 3: Implement ability to add/remove directories
+
+- [x] Week 4: UI population
+
+- [x] Week 5: Basic playback implementation
+
+- [x] Week 5: Basic queue implementation
