@@ -1,0 +1,62 @@
+import { styles } from "../styles.slint";
+import { PlayerState } from "../globals.slint";
+
+export component progressBar inherits Rectangle{
+    property <bool> dragging;
+    property <float> drag-ratio;
+    property <float> ratio: PlayerState.dur > 0
+        ? clamp(PlayerState.pos / PlayerState.dur, 0, 1)
+        : 0;
+    property <float> shown: root.dragging ? root.drag-ratio : root.ratio;
+
+    min-height: 16px;
+    horizontal-stretch: 1;
+
+    track := Rectangle{
+        y: (parent.height - self.height) / 2;
+        height: touch.pressed ? 6px : 4px;
+        border-radius: self.height / 2;
+        background: styles.theme.container.floating.darker(25%);
+        animate height { duration: 120ms; easing: styles.easing; }
+
+        Rectangle{
+            x: 0;
+            width: handle.x + handle.width / 2;
+            border-radius: self.height / 2;
+            background: styles.theme.container.ghost-text;
+        }
+    }
+
+    handle := Rectangle {
+        width: 4px;
+        height: touch.pressed ? 16px : 4px;
+        x: (root.width - self.width) * root.shown;
+        y: (root.height - self.height) / 2;
+        border-width: 3px;
+        border-radius: self.height / 2;
+        background: styles.theme.container.ghost-text;
+        animate height { duration: 120ms; easing: styles.easing; }
+    }
+
+    touch := TouchArea{
+        mouse-cursor: pointer;
+        pointer-event(e)=>{
+            if e.button != PointerEventButton.left{
+                return;
+            }
+            if e.kind == PointerEventKind.down{
+                root.drag-ratio = clamp(self.mouse-x / self.width, 0, 1);
+                root.dragging = true;
+            } else if e.kind == PointerEventKind.up && root.dragging{
+                root.dragging = false;
+                PlayerState.pos = root.drag-ratio * PlayerState.dur;
+                PlayerState.seek(PlayerState.pos);
+            }
+        }
+        moved=>{
+            if root.dragging {
+                root.drag-ratio = clamp(self.mouse-x / self.width, 0, 1);
+            }
+        }
+    }
+}

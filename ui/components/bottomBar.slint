@@ -1,0 +1,13 @@
+import { styles } from "../styles.slint";
+import { progressBar } from "progress.slint";
+
+export component bottomBar inherits Rectangle {
+    background: styles.theme.container.background;
+    height: 32px;
+
+    HorizontalLayout {
+        padding-left: styles.margin;
+        padding-right: styles.margin;
+        progressBar{}
+    }
+}

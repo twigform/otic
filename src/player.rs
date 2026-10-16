@@ -1,11 +1,13 @@
 use rodio::source::EmptyCallback;
-use rodio::{Decoder, MixerDeviceSink};
+use rodio::{Decoder, MixerDeviceSink, Source};
 use std::fs::File;
+use std::time::Duration;
 
 pub struct Player {
     pub device: MixerDeviceSink,
     pub current: Option<rodio::Player>,
     pub volume: f32,
+    pub duration: Option<Duration>,
 }
 
 pub fn new_player() -> Player {
@@ -14,6 +16,23 @@ pub fn new_player() -> Player {
         device,
         current: None,
         volume: 0.5,
+        duration: None,
+    }
+}
+
+pub fn pos(player: &Player) -> Duration {
+    player
+        .current
+        .as_ref()
+        .map(|p| p.get_pos())
+        .unwrap_or_default()
+}
+
+pub fn seek(player: &Player, to: Duration) {
+    if let Some(current) = &player.current {
+        if let Err(e) = current.try_seek(to) {
+            eprintln!("seek error: {e:?}");
+        }
     }
 }
 
@@ -59,6 +78,7 @@ pub fn play_file(player: &mut Player, path: &str, on_finished: impl Fn() + Send 
         }
     };
 
+    player.duration = source.total_duration();
     player.current = None;
     let p = rodio::Player::connect_new(player.device.mixer());
     p.set_volume(player.volume);

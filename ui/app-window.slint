@@ -8,6 +8,7 @@ export { Track } from "common.slint";
 export { PlayerState, DirsState, WindowState } from "globals.slint";
 
 import "assets/fonts/GoogleSansFlex.ttf";
+import { bottomBar } from "components/bottomBar.slint";
 
 export component MainWindow inherits Window {
     title: "otic";
@@ -47,6 +48,14 @@ export component MainWindow inherits Window {
 
             if CurrentView.selected-view == 0 : mainView {}
             if CurrentView.selected-view == 1 : settingsView {}
+
+            Rectangle {
+                height: 1px;
+                background: styles.theme.container.border;
+                horizontal-stretch: 1;
+            }
+
+            bottomBar { z: 100; }
         }
     }
 }

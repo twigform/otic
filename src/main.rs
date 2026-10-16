@@ -3,6 +3,7 @@ slint::include_modules!();
 use slint::{Model, ModelRc, SharedString, VecModel};
 use std::cell::RefCell;
 use std::rc::Rc;
+use std::time::Duration;
 
 mod dir;
 mod library;
@@ -26,6 +27,8 @@ fn play_at(
     let state = window.global::<PlayerState>();
     state.set_selected_index(index as i32);
     state.set_playing(player::playing(player));
+    state.set_pos(0.0);
+    state.set_dur(player.duration.map_or(0.0, |d| d.as_secs_f32()));
 }
 
 fn main() -> Result<(), slint::PlatformError> {
@@ -108,6 +111,7 @@ fn main() -> Result<(), slint::PlatformError> {
             } else {
                 player.borrow_mut().current = None;
                 window.global::<PlayerState>().set_playing(false);
+                window.global::<PlayerState>().set_pos(0.0);
             }
         }
     });
@@ -131,6 +135,31 @@ fn main() -> Result<(), slint::PlatformError> {
                     prev as usize,
                 );
             }
+        }
+    });
+
+    main_window.global::<PlayerState>().on_seek({
+        let player = player.clone();
+        move |secs| {
+            player::seek(&player.borrow(), Duration::from_secs_f32(secs.max(0.0)));
+        }
+    });
+
+    let timer = slint::Timer::default();
+    timer.start(slint::TimerMode::Repeated, Duration::from_millis(100), {
+        let weak_window = weak_window.clone();
+        let player = player.clone();
+        move || {
+            let Some(window) = weak_window.upgrade() else {
+                return;
+            };
+            let player = player.borrow();
+            if !player::playing(&player) {
+                return;
+            }
+            window
+                .global::<PlayerState>()
+                .set_pos(player::pos(&player).as_secs_f32());
         }
     });
 

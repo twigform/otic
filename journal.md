@@ -68,4 +68,24 @@ Next, I'll be focusing on adding a progress bar/seeker at the bottom, and metada
 
 - [x] Week 5: Basic playback implementation
 
-- [x] Week 5: Basic queue implementation
+- [x] Week 6: Basic queue implementation
+
+## Week 6:
+
+Progress bar :) 
+The new progress bar is in the bottom bar and shows how far through the current track you are (you can also drag and click it, of course.) Basically on the math side the bar is just a number between 0 and 1, and the number is decided with position/duration. I added 2 new globals (pos and dur) and one new callback (seek). The bar only calls seek when you let go of it cause if it fired every time the mouse moved that would cause lag. 
+In rust, the player in rodio has get_pos() and try_seek() so I just used those in the player file. Other than that, a slint timer is running every 100ms, and every time it fires it checks the current position and puts that in pos. The track length comes from total_duration() from the rodio decoder, which I get in play_file before the decoder goes to the player. If rodio can't find the length it just defaults to 0.
+
+Next, I'll be doing metadata scanning.
+
+- [x] Week 1: Mockup UI in Figma, research Rust libraries to be used, init repo 
+
+- [x] Week 2: Rough UI skeleton, basic window/layout, placeholder views
+
+- [x] Week 3: Implement ability to add/remove directories
+
+- [x] Week 4: UI population
+
+- [x] Week 5: Basic playback implementation
+
+- [x] Week 6: Basic queue implementation
