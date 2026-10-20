@@ -1,13 +1,37 @@
 import { styles } from "../styles.slint";
 import { progressBar } from "progress.slint";
+import { PlayerState } from "../globals.slint";
 
 export component bottomBar inherits Rectangle {
     background: styles.theme.container.background;
     height: 32px;
 
+    pure function fmt(secs: float) -> string {
+        return Math.floor(secs / 60) + ":"
+            + (Math.mod(Math.floor(secs), 60) < 10 ? "0" : "")
+            + Math.mod(Math.floor(secs), 60);
+    }
+
     HorizontalLayout {
         padding-left: styles.margin;
         padding-right: styles.margin;
+        spacing: styles.margin;
         progressBar{}
+
+        HorizontalLayout {
+        padding-top: styles.margin;
+        padding-bottom: styles.margin;
+        width: 72px;
+            Rectangle {
+                background: styles.theme.container.floating;
+                border-radius: styles.border-radius;
+                Text {
+                    text: fmt(PlayerState.pos) + " / " + fmt(PlayerState.dur);
+                    color: styles.theme.container.text;
+                    horizontal-alignment: center;
+                    opacity: 0.6;
+                }
+            }
+        }
     }
 }
