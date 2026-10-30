@@ -6,7 +6,8 @@ use std::rc::Rc;
 use std::time::Duration;
 
 mod dir;
-mod library;
+// mod library;
+mod librarynew;
 mod player;
 
 fn play_at(
@@ -38,9 +39,12 @@ fn main() -> Result<(), slint::PlatformError> {
     let player = Rc::new(RefCell::new(player::new_player()));
 
     // track stuff
+    let library = Rc::new(RefCell::new(
+        librarynew::Library::open().expect("couldn't open library db"),
+    ));
 
     let init_dirs = dir::list_dirs().unwrap_or_default();
-    let initial_tracks = library::scan_all(&init_dirs);
+    let initial_tracks = library.borrow_mut().scan_all(&init_dirs);
 
     let tracks_thing: Rc<VecModel<Track>> = Rc::new(VecModel::from(initial_tracks));
 
@@ -177,17 +181,17 @@ fn main() -> Result<(), slint::PlatformError> {
         .set_directories(ModelRc::from(dirs_thing.clone()));
 
     main_window.global::<DirsState>().on_add_directory({
+        let library = library.clone();
         let tracks_thing = tracks_thing.clone();
         let dirs_thing = dirs_thing.clone();
 
         move || match dir::add_dir() {
             Ok(Some(chosen)) => {
-                let new_tracks = library::scan_all(&[chosen.clone()]);
-                for track in new_tracks {
-                    tracks_thing.push(track);
-                }
-
                 dirs_thing.push(chosen.display().to_string().into());
+
+                let all_dirs = dir::list_dirs().unwrap_or_default();
+                let new_tracks = library.borrow_mut().scan_all(&all_dirs);
+                tracks_thing.set_vec(new_tracks);
             }
             Ok(None) => {}
             Err(e) => {
@@ -197,6 +201,7 @@ fn main() -> Result<(), slint::PlatformError> {
     });
 
     main_window.global::<DirsState>().on_rm_directory({
+        let library = library.clone();
         let tracks_thing = tracks_thing.clone();
         let dirs_thing = dirs_thing.clone();
 
@@ -208,7 +213,7 @@ fn main() -> Result<(), slint::PlatformError> {
                     dirs_thing.remove(index);
 
                     let all_dirs = dir::list_dirs().unwrap_or_default();
-                    let new_tracks = library::scan_all(&all_dirs);
+                    let new_tracks = library.borrow_mut().scan_all(&all_dirs);
                     tracks_thing.set_vec(new_tracks);
                 }
                 Err(e) => {

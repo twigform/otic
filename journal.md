@@ -89,3 +89,67 @@ Next, I'll be doing metadata scanning.
 - [x] Week 5: Basic playback implementation
 
 - [x] Week 6: Basic queue implementation
+
+## Week 7:
+
+Not a ton of notable progress, mostly just added the time indicator to the seek bar.
+
+Next, I'll be doing metadata scanning.
+
+- [x] Week 1: Mockup UI in Figma, research Rust libraries to be used, init repo 
+
+- [x] Week 2: Rough UI skeleton, basic window/layout, placeholder views
+
+- [x] Week 3: Implement ability to add/remove directories
+
+- [x] Week 4: UI population
+
+- [x] Week 5: Basic playback implementation
+
+- [x] Week 6: Basic queue implementation
+
+## Week 8:
+
+Metadata scanning is done :) Tracks show their title and artist and duration now instead of the filename.
+
+I decided to rewrite the library code instead of just modifying it, so all the new code is under librarynew.rs. (I'll probably just make it library.rs later, but this is how it is for now.)
+
+The scanner works like this: first get_files goes through each directory (and each subdirectory) and grabs every audio file. Then for each of those files it grabs the title, artist, and duration which it grabs with read_mdata. If the file is borked it just falls back to saying the filename for the title and unknown artist for the artist and 0 for the duration. (And if there's missing metadata it just fills in the spots it can, eg. Awesome Song - Unknown Artist - 3:20 <- the artist couldn't be found) Last to_track turns the metadata into the Track struct that I use in slint, and formats the duration.  
+
+Reading a bunch of tags EVERY time you open the app and mess with stuff is dumb, so I implemented a cache with rusqlite. It's got one table called tracks where the file path is the primary key. Each row stores the path, modified time, size, title, artist and duration. It's stored in the same folder as the config. It stores every track's path and the file size, title, artist, duration, and modified time (if you're wondering what modified time means, it's basically just a timestamp of the last time the file was changed). Each scan, stuff is only reread if it's new or it's last modified time or size changed. Tracks that are deleted are deleted from the database. It also prints a log to the console! :)
+
+A more detailed explanation of each scan:
+First the table is loaded into HashMap keyed by path, next for every file I grab the modified time and size. After that I look up the path in the map and take it out with remove (I'm not deleting it from the db, just the temporary HashMap). If the modified time and the filesize both match up I just reuse the saved metadata and if they don't or the file isn't in the map (new file) I re-read (or read) the tags and add them to the db. Finally everything that's left in the map is just deleted stuff so it deletes it from the actual db.
+
+So on first launch/add of files it'll look like: 
+365 tracks
+365 read from disk
+0 removed
+
+And on the 2nd:
+365 tracks
+0 read from disk
+0 removed
+
+A quick explanation of how sqlite works if you don't know:
+Tables are the main containers like a google sheet kinda. Then inside the tables are columns, which are like the properties of each row. And rows are basically just entries (for example in my code each track is a row). For me, I have my PRIMARY KEY on "path" which means that every row has to have a unique path, and sqlite indexes stuff off of it so it can find stuff fast without going through each row.
+Then in my actual code I communicate with the db with the language SQL. (eg. SELECT to read rows, INSERT OR REPLACE to add a track (or overwrite), and DELETE.)
+The main reason I'm using this over a JSON or TOML or something is cause it's more efficient to use sqlite (and faster with huge libraries). With something like JSON I'd have to rewrite everything for every change (as opposed to sqlite only changing the rows that actually changed).
+
+New crates this week: rusqlite, lofty
+ 
+Next up: OS integration!
+
+- [x] Week 1: Mockup UI in Figma, research Rust libraries to be used, init repo 
+
+- [x] Week 2: Rough UI skeleton, basic window/layout, placeholder views
+
+- [x] Week 3: Implement ability to add/remove directories
+
+- [x] Week 4: UI population
+
+- [x] Week 5: Basic playback implementation
+
+- [x] Week 6: Basic queue implementation
+
+- [x] Week 7: Metadata scanning
