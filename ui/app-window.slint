@@ -2,7 +2,7 @@ import { styles } from "styles.slint";
 import { mainView } from "views/main.slint";
 import { settingsView } from "views/settings.slint";
 import { topBar } from "components/topBar.slint";
-import { CurrentView } from "globals.slint";
+import { PlayerState, CurrentView } from "globals.slint";
 
 export { Track } from "common.slint";
 export { PlayerState, DirsState, WindowState } from "globals.slint";
@@ -26,36 +26,77 @@ export component MainWindow inherits Window {
 
     property <bool> linux: Platform.os == OperatingSystemType.linux;
 
-    Rectangle {
-    border-color: #3a3836; // i just yoinked this by colorpicking the border from discord. probably should make it dynamic later idk
-    border-width: root.linux ? 0px : 1px;
-    background: styles.theme.background;
-    border-radius: root.linux ? 0px : 8px; // windows default https://learn.microsoft.com/en-us/windows/apps/design/signature-experiences/geometry
-    clip: true;
+    forward-focus: keys;
 
-        VerticalLayout {
-            // padding: styles.margin;
-            // spacing: styles.margin / 2;
+    // keybinds should be added to settings later.
+    // atm:
+    // space: pause
+    // left: back 5s
+    // right: fwd 5s
+    // ctrl + arrows: seek
+    // shift + arrows: beginning or end of track
 
-            topBar{ z: 100; }
-
-            Rectangle {
-                height: 1px;
-                background: styles.theme.container.border;
-                horizontal-stretch: 1;
+    keys := FocusScope {
+        key-pressed(event) => {
+            if(event.text == " "){
+                PlayerState.toggle();
+                return accept;
+            }
+            if(event.text == Key.RightArrow){
+                if (event.modifiers.control) {
+                    PlayerState.next();
+                } else if (event.modifiers.shift) {
+                    PlayerState.seek(Math.max(PlayerState.dur - 0.1, 0));
+                } else {
+                    PlayerState.seek(Math.min(PlayerState.pos + 5, PlayerState.dur));
+                }
+                return accept;
             }
 
-
-            if CurrentView.selected-view == 0 : mainView {}
-            if CurrentView.selected-view == 1 : settingsView {}
-
-            Rectangle {
-                height: 1px;
-                background: styles.theme.container.border;
-                horizontal-stretch: 1;
+            if (event.text == Key.LeftArrow) {
+                if (event.modifiers.control) {
+                    PlayerState.previous();
+                } else if (event.modifiers.shift) {
+                    PlayerState.seek(0);
+                } else {
+                    PlayerState.seek(Math.max(PlayerState.pos - 5, 0));
+                }
+                return accept;
             }
+            return reject;
+        }
 
-            bottomBar { z: 100; }
+        Rectangle {
+        border-color: #3a3836; // i just yoinked this by colorpicking the border from discord. probably should make it dynamic later idk
+        border-width: root.linux ? 0px : 1px;
+        background: styles.theme.background;
+        border-radius: root.linux ? 0px : 8px; // windows default https://learn.microsoft.com/en-us/windows/apps/design/signature-experiences/geometry
+        clip: true;
+
+            VerticalLayout {
+                // padding: styles.margin;
+                // spacing: styles.margin / 2;
+
+                topBar{ z: 100; }
+
+                Rectangle {
+                    height: 1px;
+                    background: styles.theme.container.border;
+                    horizontal-stretch: 1;
+                }
+
+
+                if CurrentView.selected-view == 0 : mainView {}
+                if CurrentView.selected-view == 1 : settingsView {}
+
+                Rectangle {
+                    height: 1px;
+                    background: styles.theme.container.border;
+                    horizontal-stretch: 1;
+                }
+
+                bottomBar { z: 100; }
+            }
         }
     }
 }
