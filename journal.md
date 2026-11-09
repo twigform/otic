@@ -153,3 +153,25 @@ Next up: OS integration!
 - [x] Week 6: Basic queue implementation
 
 - [x] Week 7: Metadata scanning
+
+## Week 9:
+
+After research, I've decided against OS integration. I don't use it that much personally, and it seems like it'll be a pain to implement (the crate I was planning on using is not actively maintained since 2025, there are weird cross OS dependencies, etc.) 
+
+Instead, this week, I added keyboard controls by wrapping the main window in a FocusScope and adding various binds (eg. space to pause, arrow keys to seek, arrow keys + modifiers to skip.)
+
+Next, I'll be doing settings polish.
+
+- [x] Week 1: Mockup UI in Figma, research Rust libraries to be used, init repo 
+
+- [x] Week 2: Rough UI skeleton, basic window/layout, placeholder views
+
+- [x] Week 3: Implement ability to add/remove directories
+
+- [x] Week 4: UI population
+
+- [x] Week 5: Basic playback implementation
+
+- [x] Week 6: Basic queue implementation
+
+- [x] Week 7: Metadata scanning
