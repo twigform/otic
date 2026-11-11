@@ -1,0 +1,16 @@
+import { styles } from "../styles.slint";
+
+export component themeSettings inherits HorizontalLayout {
+    Rectangle {
+        horizontal-stretch: 1;
+        vertical-stretch: 1;
+        background: styles.theme.background;
+        Rectangle {
+        height: 36px;
+            Text {
+                text: "Theme";
+                font-weight: 800;
+            }
+        }
+    }
+}

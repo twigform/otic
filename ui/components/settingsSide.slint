@@ -1,0 +1,61 @@
+import { styles } from "../styles.slint";
+import { CurrentSettingsView } from "../globals.slint";
+
+export component settingsSide inherits HorizontalLayout{
+    Rectangle {
+        background: styles.theme.container.background;
+        vertical-stretch: 1;
+        width: 200px;
+        VerticalLayout {
+            padding: styles.margin;
+            spacing: styles.margin / 2;
+            alignment: start;
+
+            library-button := Rectangle {
+                height: 32px;
+                border-radius: styles.border-radius;
+                background: CurrentSettingsView.selected-settings-view == 0
+                    ? styles.theme.container.floating
+                    : transparent;
+
+                Text {
+                    text: "Library";
+                    color: styles.theme.container.text;
+                    horizontal-alignment: left;
+                    vertical-alignment: center;
+                    x: styles.margin;
+                }
+
+                TouchArea {
+                    mouse-cursor: pointer;
+                    clicked => {
+                        CurrentSettingsView.selected-settings-view = 0;
+                    }
+                }
+            }
+
+            theme-button := Rectangle {
+                height: 32px;
+                border-radius: styles.border-radius;
+                background: CurrentSettingsView.selected-settings-view == 1
+                    ? styles.theme.container.floating
+                    : transparent;
+
+                Text {
+                    text: "Theme";
+                    color: styles.theme.container.text;
+                    horizontal-alignment: left;
+                    vertical-alignment: center;
+                    x: styles.margin;
+                }
+
+                TouchArea {
+                    mouse-cursor: pointer;
+                    clicked => {
+                        CurrentSettingsView.selected-settings-view = 1;
+                    }
+                }
+            }
+        }
+    }
+}
