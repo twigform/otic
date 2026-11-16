@@ -175,3 +175,26 @@ Next, I'll be doing settings polish.
 - [x] Week 6: Basic queue implementation
 
 - [x] Week 7: Metadata scanning
+
+## Week 10:
+
+This week, I focused on redesigning the settings page, and adding a new page system to the settings page. This page system works the same as the main app, essentially I just have a section of the settings page that is based on a variable, and clicking on the different pages changes that variable, which changes the page.
+Other than that, I made some style tweaks and additions to the settings page to make it work better with the new page UI.
+
+Next, I'll be doing more settings polish. At the moment it's just a placeholder page so I'll need to add actual functionality next.
+
+- [x] Week 1: Mockup UI in Figma, research Rust libraries to be used, init repo 
+
+- [x] Week 2: Rough UI skeleton, basic window/layout, placeholder views
+
+- [x] Week 3: Implement ability to add/remove directories
+
+- [x] Week 4: UI population
+
+- [x] Week 5: Basic playback implementation
+
+- [x] Week 6: Basic queue implementation
+
+- [x] Week 7: Metadata scanning
+
+- [x] Week 9: Settings polish (1/2 done, need to add functionality)
