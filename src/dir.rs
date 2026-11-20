@@ -4,10 +4,28 @@ use std::fs;
 use std::io;
 use std::path::{Path, PathBuf};
 
-#[derive(Debug, Serialize, Deserialize, Default)]
+pub const THEME_LIGHT: u32 = 0;
+pub const THEME_DARK: u32 = 1;
+
+fn d_theme() -> u32 {
+    THEME_DARK
+}
+
+#[derive(Debug, Serialize, Deserialize)]
 struct Config {
     #[serde(default)]
     dirs: Vec<PathBuf>,
+    #[serde(default = "d_theme")]
+    theme: u32,
+}
+
+impl Default for Config {
+    fn default() -> Self {
+        Self {
+            dirs: Vec::new(),
+            theme: d_theme(),
+        }
+    }
 }
 
 fn pick_dir() -> Option<std::path::PathBuf> {
@@ -80,4 +98,21 @@ pub fn list_dirs() -> io::Result<Vec<PathBuf>> {
     let path = conf_init()?;
     let config = read_config(&path)?;
     Ok(config.dirs)
+}
+
+pub fn get_theme() -> io::Result<u32> {
+    let path = conf_init()?;
+    let config = read_config(&path)?;
+    Ok(if config.theme <= THEME_DARK {
+        config.theme
+    } else {
+        d_theme()
+    })
+}
+
+pub fn set_theme(theme: u32) -> io::Result<()> {
+    let path = conf_init()?;
+    let mut config = read_config(&path)?;
+    config.theme = theme;
+    write_config(&path, &config)
 }
